@@ -12,34 +12,39 @@
 
 ActiveRecord::Schema.define(version: 20181201211440) do
 
-  create_table "fonds", force: :cascade do |t|
+  create_table "fond_sectors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "fond_id", null: false
+    t.bigint "sector_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fond_id"], name: "index_fond_sectors_on_fond_id"
+    t.index ["sector_id"], name: "index_fond_sectors_on_sector_id"
+  end
+
+  create_table "fonds", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", null: false
     t.string "web"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "sectors", force: :cascade do |t|
+  create_table "sectors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "stages", force: :cascade do |t|
+  create_table "stages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", null: false
+    t.bigint "fond_id", null: false
     t.integer "minimum"
     t.integer "maximum"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["fond_id"], name: "index_stages_on_fond_id"
   end
 
-  create_table "table_fond_sectors", force: :cascade do |t|
-    t.integer "fond_id", null: false
-    t.integer "sector_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["fond_id"], name: "index_table_fond_sectors_on_fond_id"
-    t.index ["sector_id"], name: "index_table_fond_sectors_on_sector_id"
-  end
-
+  add_foreign_key "fond_sectors", "fonds"
+  add_foreign_key "fond_sectors", "sectors"
+  add_foreign_key "stages", "fonds"
 end
